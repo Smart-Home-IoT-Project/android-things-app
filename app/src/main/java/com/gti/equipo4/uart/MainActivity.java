@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,13 +45,20 @@ public class MainActivity extends Activity {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                s = uart.leer();
+                //s = uart.leer();
+                s = "{\"Distancia\":\"1\",\"Hora\":\"10/02/10000\"}";
                 Log.d(TAG, "Recibido de Arduino: "+s);
                 //Envio datos a la db
+
+                JsonParser jsonParser = new JsonParser();
+                JsonObject medidas = jsonParser.parse(s).getAsJsonObject();
+
                 Map<String, Object> datos = new HashMap<>();
-                datos.put("dato_"+i+"",s);
+                datos.put("dato_"+i+"",medidas.getAsJsonObject().get("Distancia").getAsInt());
+                datos.put("hora_dato_"+i+"",medidas.getAsJsonObject().get("Hora").toString());
+
+                db.collection("Medidas").document("Altura").update(datos);
                 i++;
-                db.collection("coleccion").document("Medidas").set(datos);
             }
         };
 
