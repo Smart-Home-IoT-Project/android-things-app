@@ -18,7 +18,6 @@ public class MainActivity extends Activity {
     private String s;
     private int i = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,20 +44,25 @@ public class MainActivity extends Activity {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                //s = uart.leer();
-                s = "{\"Distancia\":\"1\",\"Hora\":\"10/02/10000\"}";
-                Log.d(TAG, "Recibido de Arduino: "+s);
-                //Envio datos a la db
+                s = uart.leer();
+                //s = "{\"hora\":\"Thu Nov  8 21:45:20 2018\\n\",\"altura\":2.607333,\"peso\":3357}";
 
-                JsonParser jsonParser = new JsonParser();
-                JsonObject medidas = jsonParser.parse(s).getAsJsonObject();
+                if (s != "" ){
+                    Log.d(TAG, "Recibido de Arduino: "+s);
+                    //Envio datos a la db
 
-                Map<String, Object> datos = new HashMap<>();
-                datos.put("dato_"+i+"",medidas.getAsJsonObject().get("Distancia").getAsInt());
-                datos.put("hora_dato_"+i+"",medidas.getAsJsonObject().get("Hora").toString());
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject medidas = jsonParser.parse(s).getAsJsonObject();
 
-                db.collection("Medidas").document("Altura").update(datos);
-                i++;
+                    Map<String, Object> datos = new HashMap<>();
+                    datos.put("altura",medidas.getAsJsonObject().get("altura").getAsInt());
+                    datos.put("peso",medidas.getAsJsonObject().get("peso").getAsInt());
+                    datos.put("hora",medidas.getAsJsonObject().get("hora").toString());
+
+                    db.collection("Bascula").add(datos);
+                    i++;
+                }
+
             }
         };
 
