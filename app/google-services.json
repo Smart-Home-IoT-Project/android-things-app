@@ -1,0 +1,102 @@
+{
+  "project_info": {
+    "project_number": "1033760261218",
+    "firebase_url": "https://smartapp-aa394.firebaseio.com",
+    "project_id": "smartapp-aa394",
+    "storage_bucket": "smartapp-aa394.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033760261218:android:70ce11f31497a242",
+        "android_client_info": {
+          "package_name": "com.gti.equipo4.smartapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033760261218-nnqkjdhvni0soocgebj6iaq7sdhd6837.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gti.equipo4.smartapp",
+            "certificate_hash": "23ee7ee8f8b17c42737dab0afafdb08c0aec21e0"
+          }
+        },
+        {
+          "client_id": "1033760261218-daa406mdnmrnu9tgo3s6jjjc498lb5p3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gti.equipo4.smartapp",
+            "certificate_hash": "3d919f7b5cc583f1e9eb90f7c3cf797b000e0ef7"
+          }
+        },
+        {
+          "client_id": "1033760261218-8du4n6mu3ff2js52cct2o5qipi0fns7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gti.equipo4.smartapp",
+            "certificate_hash": "9bc22e238ce21a8963173819264c2ca5896ec9cc"
+          }
+        },
+        {
+          "client_id": "1033760261218-9q6drf3s6lbgpvlamf2fttm7ipilcrme.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3YdH2EfKh6yLhJZhVf5kqqM45mcGftM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033760261218-9q6drf3s6lbgpvlamf2fttm7ipilcrme.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033760261218:android:cb24eb48be4a783d",
+        "android_client_info": {
+          "package_name": "com.gti.equipo4.uart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033760261218-9q6drf3s6lbgpvlamf2fttm7ipilcrme.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE3YdH2EfKh6yLhJZhVf5kqqM45mcGftM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
