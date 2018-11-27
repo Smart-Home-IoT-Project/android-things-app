@@ -30,6 +30,10 @@ public class MainActivity extends Activity implements MqttCallback {
     private int i = 0;
     MqttClient client;
 
+    // Firebase DB
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +69,10 @@ public class MainActivity extends Activity implements MqttCallback {
             Log.e(Mqtt.TAG, "Error al publicar.", e);
         }
 
+        /*
         //Firebase db
-
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        */
 
         final Map<String, Object> datos = new HashMap<>();
 
@@ -133,6 +138,9 @@ public class MainActivity extends Activity implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         String payload = new String(message.getPayload());
         Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
+        Map<String, Object> datos = new HashMap<>();
+        datos.put(topic,payload);
+        db.collection("Casa_1213").document("habitaciones").collection("Cocina").add(datos);
     }
 
     @Override
