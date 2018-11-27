@@ -8,23 +8,71 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends Activity {
+import static com.gti.equipo4.uart.Mqtt.*;
+
+public class MainActivity extends Activity implements MqttCallback {
+
     private static final String TAG = MainActivity.class.getSimpleName();
     private String s;
     private int i = 0;
+    MqttClient client;
+
+    // Firebase DB
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Firebase db
+        // Conexión a broker MQTT
+        try {
+            Log.i(TAG, " Android Things conectando al broker " + broker);
+            client = new MqttClient(broker, clientId, new MemoryPersistence());
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setCleanSession(true);
+            connOpts.setKeepAliveInterval(60);
+            connOpts.setWill(topicRoot + "WillTopic", "Android Things desconectado".getBytes(), qos, false);
+            client.connect(connOpts);
+        } catch (MqttException e) {
+            Log.e(TAG, "Error al conectar.", e);
+        }
 
+        try {
+            Log.i(TAG, "Suscrito a " + topicRoot + "#");
+            client.subscribe(topicRoot + "#", qos);
+            client.setCallback(this);
+        } catch (MqttException e) {
+            Log.e(TAG, "Error al suscribir.", e);
+        }
+
+        try {
+            Log.i(Mqtt.TAG, "Publicando mensaje: " + "conectado");
+            MqttMessage message = new MqttMessage("Android Things".getBytes());
+            message.setQos(qos);
+            message.setRetained(false);
+            client.publish(topicRoot + "conectado", message);
+        } catch (MqttException e) {
+            Log.e(Mqtt.TAG, "Error al publicar.", e);
+        }
+
+        /*
+        //Firebase db
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        */
 
         final Map<String, Object> datos = new HashMap<>();
 
@@ -79,6 +127,25 @@ public class MainActivity extends Activity {
 
 
 
+    }
+
+    @Override
+    public void connectionLost(Throwable cause) {
+        Log.d(TAG, "Conexión perdida");
+    }
+
+    @Override
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+        String payload = new String(message.getPayload());
+        Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
+        Map<String, Object> datos = new HashMap<>();
+        datos.put(topic,payload);
+        db.collection("Casa_1213").document("habitaciones").collection("Cocina").add(datos);
+    }
+
+    @Override
+    public void deliveryComplete(IMqttDeliveryToken token) {
+        Log.d(TAG, "Entrega completa");
     }
 
     @Override
