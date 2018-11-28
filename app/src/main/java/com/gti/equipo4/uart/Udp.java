@@ -1,18 +1,8 @@
 package com.gti.equipo4.uart;
 
-package com.company.name.wifi_test;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -21,8 +11,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-
-public class Udp extends AppCompatActivity {
+public class Udp{
 
 
     InetAddress server_ip;
@@ -36,7 +25,11 @@ public class Udp extends AppCompatActivity {
     {
 
 
+        try {
             server_ip = InetAddress.getByName("192.168.0.xxx"); // ip of THE OTHER DEVICE
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
 
         async_udp = new AsyncTask<Void, Void, Void>() {
             @Override
@@ -46,12 +39,10 @@ public class Udp extends AppCompatActivity {
                 byte b1[];
                 b1 = new byte[100];
                 b1 = str2.getBytes();
-                //DatagramPacket p1 = new DatagramPacket(b1, b1.length, server_ip, server_port);
 
 
 
-
-                    //DatagramSocket s = new DatagramSocket(server_port, server_ip);
+                try {
                     DatagramSocket s = new DatagramSocket(server_port);
                     s.connect(server_ip, server_port);
 
@@ -74,6 +65,16 @@ public class Udp extends AppCompatActivity {
                     String str_msg = "RECEIVED FROM CLIENT IP =" + server_ip + " port=" + server_port + " message no = " + b1[0] +
                             " data=" + str.substring(1);  //first character is message number
                     //WARNING: b1 bytes display as signed but are sent as signed characters!
+
+
+
+                } catch (SocketException e)
+                {
+                      //Error creating socket
+                } catch (IOException e)
+                {
+                      //Error recieving packet
+            }
 
 
                 return null;
