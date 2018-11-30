@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -105,9 +106,26 @@ public class MainActivity extends Activity implements MqttCallback {
                     Map<String, Object> datos = new HashMap<>();
                     datos.put("altura",medidas.getAsJsonObject().get("altura").getAsInt());
                     datos.put("peso",medidas.getAsJsonObject().get("peso").getAsInt());
-                    datos.put("hora",medidas.getAsJsonObject().get("hora").toString());
+                    datos.put("hora",FieldValue.serverTimestamp());
 
-                    db.collection("Bascula").add(datos);
+                    // Joan
+                    if (medidas.getAsJsonObject().get("peso").getAsInt() < 81 && medidas.getAsJsonObject().get("peso").getAsInt() > 78){
+                        db.collection("Casa_1213")
+                        .document("bascula")
+                        .collection("TGHy78uC5gYvnQpeKObMXdhfCZd2")
+                        .add(datos);
+
+                    }
+
+                    // Alex
+                    if (medidas.getAsJsonObject().get("peso").getAsInt() < 96 && medidas.getAsJsonObject().get("peso").getAsInt() > 94){
+                        db.collection("Casa_1213")
+                                .document("bascula")
+                                .collection("LZJjX3dl6RPRR7UiD4msSGvbg2l1")
+                                .add(datos);
+
+                    }
+
                     i++;
                 }
 
@@ -140,7 +158,7 @@ public class MainActivity extends Activity implements MqttCallback {
         Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
         Map<String, Object> datos = new HashMap<>();
         datos.put(topic,payload);
-        db.collection("Casa_1213").document("habitaciones").collection("Cocina").add(datos);
+        //db.collection("Casa_1213").document("habitaciones").collection("Cocina").add(datos);
     }
 
     @Override
