@@ -157,8 +157,28 @@ public class MainActivity extends Activity implements MqttCallback {
         String payload = new String(message.getPayload());
         Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
         Map<String, Object> datos = new HashMap<>();
-        datos.put(topic,payload);
-        //db.collection("Casa_1213").document("habitaciones").collection("Cocina").add(datos);
+        datos.put("value",payload);
+        datos.put("hora",FieldValue.serverTimestamp());
+
+        if (topic.equals("equipo4/practica/medida/humedad")){
+            db.collection("Casa_1213")
+                    .document("habitaciones")
+                    .collection("Cocina")
+                    .document("humedad")
+                    .collection("registros")
+                    .add(datos);
+
+        }
+
+        if (topic.equals("equipo4/practica/medida/temperatura")){
+            db.collection("Casa_1213")
+                    .document("habitaciones")
+                    .collection("Cocina")
+                    .document("temperatura")
+                    .collection("registros")
+                    .add(datos);
+        }
+
     }
 
     @Override
