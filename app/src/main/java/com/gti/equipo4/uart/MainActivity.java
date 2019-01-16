@@ -198,6 +198,17 @@ public class MainActivity extends Activity implements MqttCallback {
                     .add(datos);
         }
 
+        if (topic.equals("equipo4/practica/medida/personas")){
+            String payload = new String(message.getPayload());
+            int intPayLoad = Integer.parseInt(payload);
+            Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
+            //datos.put("value",intPayLoad);
+
+            db.collection("Casa_1213")
+                    .document("personas")
+                    .update("value",intPayLoad);
+        }
+
     }
 
     @Override
