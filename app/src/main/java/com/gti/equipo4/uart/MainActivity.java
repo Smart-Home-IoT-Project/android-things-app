@@ -154,13 +154,14 @@ public class MainActivity extends Activity implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        String payload = new String(message.getPayload());
-        Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
         Map<String, Object> datos = new HashMap<>();
-        datos.put("value",payload);
         datos.put("hora",FieldValue.serverTimestamp());
 
         if (topic.equals("equipo4/practica/medida/humedad")){
+            String payload = new String(message.getPayload());
+            Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
+            datos.put("value",payload);
+
             db.collection("Casa_1213")
                     .document("habitaciones")
                     .collection("Cocina")
@@ -171,10 +172,28 @@ public class MainActivity extends Activity implements MqttCallback {
         }
 
         if (topic.equals("equipo4/practica/medida/temperatura")){
+            String payload = new String(message.getPayload());
+            Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
+            datos.put("value",payload);
+
             db.collection("Casa_1213")
                     .document("habitaciones")
                     .collection("Cocina")
                     .document("temperatura")
+                    .collection("registros")
+                    .add(datos);
+        }
+
+        if (topic.equals("equipo4/practica/medida/actividad")){
+            String payload = new String(message.getPayload());
+            Boolean boolPayLoad = Boolean.valueOf(payload);
+            Log.d(TAG, "Recibiendo: " + topic + "->" + payload);
+            datos.put("value",boolPayLoad);
+
+            db.collection("Casa_1213")
+                    .document("habitaciones")
+                    .collection("Cocina")
+                    .document("actividad")
                     .collection("registros")
                     .add(datos);
         }
